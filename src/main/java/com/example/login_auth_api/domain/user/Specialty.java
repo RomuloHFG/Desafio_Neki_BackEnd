@@ -13,6 +13,7 @@ public class Specialty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotEmpty(message = "Name is required")
     private String name;
 }

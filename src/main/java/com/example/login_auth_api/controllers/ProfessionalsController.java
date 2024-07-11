@@ -2,9 +2,10 @@ package com.example.login_auth_api.controllers;
 
 import com.example.login_auth_api.domain.user.Professionals;
 import com.example.login_auth_api.exceptions.ResourceNotFoundException;
-import com.example.login_auth_api.repositories.AreaOfExpertiseRepository;
+import com.example.login_auth_api.repositories.LevelOfExpertiseRepository;
 import com.example.login_auth_api.repositories.ProfessionalsRepository;
 import com.example.login_auth_api.repositories.SpecialtyRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/Professionals")
+@SecurityRequirement(name = "jwt")
 public class ProfessionalsController {
 
     @Autowired
@@ -29,7 +31,7 @@ public class ProfessionalsController {
     private SpecialtyRepository specialtyRepository;
 
     @Autowired
-    private AreaOfExpertiseRepository areaOfExpertiseRepository;
+    private LevelOfExpertiseRepository levelOfExpertiseRepository;
 
     @GetMapping
     public List<Professionals> getAllProfessionals() {
@@ -40,8 +42,8 @@ public class ProfessionalsController {
     public ResponseEntity<Professionals> createProfessionals(@Valid @RequestBody Professionals professionals) {
         professionals.setSpecialty(specialtyRepository.findById(professionals.getSpecialty().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Specialty not found")));
-        professionals.setAreaOfExpertise(areaOfExpertiseRepository.findById(professionals.getAreaOfExpertise().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("AreaOfExpertise not found")));
+        professionals.setLevelOfExpertise(levelOfExpertiseRepository.findById(professionals.getLevelOfExpertise().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("LevelOfExpertise not found")));
         Professionals savedProfessionals = professionalsRepository.save(professionals);
         return ResponseEntity.ok(savedProfessionals);
     }

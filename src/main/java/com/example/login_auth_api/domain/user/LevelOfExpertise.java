@@ -7,15 +7,16 @@ import jakarta.validation.constraints.NotEmpty;
 
 @Data
 @Entity
-public class AreaOfExpertise {
+public class LevelOfExpertise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotEmpty(message = "Name is required")
     private String name;
 }
 
-//Este código define a estrutura e as regras básicas de validação para a entidade AreaOfExpertise,
+//Este código define a estrutura e as regras básicas de validação para a entidade LevelOfExpertise,
 //que será usada para persistir dados no banco de dados.

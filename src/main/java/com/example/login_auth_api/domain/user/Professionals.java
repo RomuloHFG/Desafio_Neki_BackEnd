@@ -24,16 +24,12 @@ public class Professionals {
     private Specialty specialty;
 
     @ManyToOne
-    @JoinColumn(name = "area_of_expertise_id", nullable = false)
-    @NotNull(message = "Area of Expertise is required")
-    private AreaOfExpertise areaOfExpertise;
+    @JoinColumn(name = "level_of_expertise_id", nullable = false)
+    @NotNull(message = "Level of Expertise is required")
+    private LevelOfExpertise levelOfExpertise;
 
     @NotEmpty(message = "Address is required")
     private String address;
-
-    @Email(message = "Email should be valid")
-    @NotEmpty(message = "Email is required")
-    private String email;
 
     @NotEmpty(message = "Phone is required")
     private String phone;
@@ -44,5 +40,5 @@ public class Professionals {
 
 //Este código define a estrutura e as regras básicas de validação para a entidade Professionals,
 //que será usada para persistir dados no banco de dados,
-//incluindo relacionamentos com outras entidades (Specialty e AreaOfExpertise) e validações para assegurar que os campos
+//incluindo relacionamentos com outras entidades (Specialty e LevelOfExpertise) e validações para assegurar que os campos
 //obrigatórios sejam preenchidos corretamente.
