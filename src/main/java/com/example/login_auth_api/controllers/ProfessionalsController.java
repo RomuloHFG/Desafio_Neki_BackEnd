@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -69,14 +70,22 @@ public class ProfessionalsController {
     }
 
     @GetMapping("/{id}/photo")
-    public ResponseEntity<byte[]> getProfessionalsPhoto(@PathVariable Long id) {
+    public ResponseEntity<?> getProfessionalsPhoto(@PathVariable Long id) {
         Professionals professionals = professionalsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("professionals not found with id " + id));
-        byte[] photo = professionals.getPhoto();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"photo.jpg\"")
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(photo);
+                .orElseThrow(() -> new ResourceNotFoundException("Professional not found with id " + id));
+
+        byte[] photoBytes = professionals.getPhoto();
+
+        if (photoBytes != null) {
+            String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(photoBase64);
+        }
+
+        return ResponseEntity.noContent().build();
+
     }
 }
 
