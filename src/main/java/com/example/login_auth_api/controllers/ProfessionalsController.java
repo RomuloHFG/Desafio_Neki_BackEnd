@@ -87,6 +87,31 @@ public class ProfessionalsController {
         return ResponseEntity.noContent().build();
 
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Professionals> updateProfessionals(@PathVariable Long id, @Valid @RequestBody Professionals professionalsDetails) {
+        Professionals professionals = professionalsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Professionals not found with id " + id));
+
+        professionals.setName(professionalsDetails.getName());
+        professionals.setSpecialty(specialtyRepository.findById(professionalsDetails.getSpecialty().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Specialty not found")));
+        professionals.setLevelOfExpertise(levelOfExpertiseRepository.findById(professionalsDetails.getLevelOfExpertise().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Level of Expertise not found")));
+        professionals.setAddress(professionalsDetails.getAddress());
+        professionals.setPhone(professionalsDetails.getPhone());
+
+        Professionals updatedProfessionals = professionalsRepository.save(professionals);
+        return ResponseEntity.ok(updatedProfessionals);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProfessionals(@PathVariable Long id) {
+        Professionals professionals = professionalsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Professionals not found with id " + id));
+
+        professionalsRepository.delete(professionals);
+        return ResponseEntity.noContent().build();
+    }
 }
 
 //Este controlador lida com a lógica de criação, recuperação e atualização de profissionais,
